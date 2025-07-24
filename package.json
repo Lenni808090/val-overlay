@@ -1,0 +1,29 @@
+{
+  "name": "val-overlay",
+  "version": "1.3.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Valorant agent selector overlay",
+  "dependencies": {
+    "electron-store": "^10.1.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "electron": "^37.2.1",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.yourname.val-overlay",
+    "productName": "Valorant Agent Selector",
+    "win": {
+      "target": "portable"
+    }
+  }
+}
