@@ -123,12 +123,51 @@ async function getPregameMatchId(
     return data.MatchID;
   } catch (error) {
     console.error(`Error during pregame match ID fetch: ${error.message}`);
-    await sleep(pollIntervalMs);
-    retries++;
   }
 }
 
-// Change all these export functions to regular functions
+async function getPregameMapId(
+  region,
+  shard,
+  preGameMatchId,
+  accessToken,
+  entitlement,
+  clientVersion,
+  clientPlatform
+) {
+  const url = `https://glz-${region}-1.${shard}.a.pvp.net/pregame/v1/matches/${preGameMatchId}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Riot-Entitlements-JWT": entitlement,
+        "X-Riot-ClientVersion": clientVersion,
+        "X-Riot-ClientPlatform": clientPlatform,
+        "User-Agent": "",
+      },
+    });
+
+    if (res.status === 404) {
+      console.log(`Player not in pregame lobby yet`);
+      return null;
+    }
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(
+        `Failed to get pregame match ID: ${res.status} ${res.statusText} - ${errorText}`
+      );
+    }
+
+    const data = await res.json();
+    console.log(data);
+    return data.MapID;
+  } catch (error) {
+    console.error(`Error during pregame match ID fetch: ${error.message}`);
+  }
+}
+
 async function lockAgent(
   region,
   shard,
@@ -173,5 +212,6 @@ module.exports = {
   getEntitlement,
   sleep,
   getPregameMatchId,
+  getPregameMapId,
   lockAgent,
 };

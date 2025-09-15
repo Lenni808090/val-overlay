@@ -1,0 +1,87 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #1e1e1e;
+  color: white;
+  margin: 20px;
+  user-select: none;
+}
+
+#draggableContainer {
+  width: 320px;
+  padding: 15px;
+  background: #2c2c2c;
+  border-radius: 12px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: grab;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  -webkit-app-region: drag;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+#agentButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #444;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  user-select: none;
+  -webkit-app-region: no-drag;
+}
+
+button:hover {
+  background: #666;
+  transform: scale(1.05);
+}
+
+button.active {
+  background: #888 !important;
+}
+
+#lockButton {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 65, 108, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+#lockButton:hover {
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  box-shadow: 0 0 20px rgba(255, 75, 43, 0.7);
+  transform: scale(1.05);
+}
+
+#lockButton:disabled {
+  background: #666 !important;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.6;
+}
+
+#abbrechenButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#status {
+  margin-top: 20px;
+  font-style: italic;
+}

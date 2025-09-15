@@ -8,6 +8,7 @@ const {
   getPregameMatchId,
   lockAgent,
   sleep,
+  getPregameMapId,
 } = require("./apiClient.js");
 
 let mainWindow;
@@ -30,7 +31,6 @@ function createMainWindow() {
 
   mainWindow.loadFile("index.html");
 }
-
 
 let canceled = false;
 
@@ -82,7 +82,7 @@ ipcMain.on("lock-agent", async (event, agentId) => {
     let matchId = null;
     while (!matchId) {
       if (canceled) {
-        mainWindow.webContents.send("update-status", "❌ Vorgang abgebrochen.");
+        mainWindow.webContents.send("update-status", "Vorgang abgebrochen.");
         canceled = false;
         mainWindow.webContents.send("cancel-success");
         return;
@@ -98,6 +98,17 @@ ipcMain.on("lock-agent", async (event, agentId) => {
       );
     }
 
+    let mapId = await getPregameMapId(        
+        region,
+        shard,
+        matchId,
+        accessToken,
+        entitlement,
+        clientVersion,
+        clientPlatform
+      );
+    
+    console.log(mapId);
     mainWindow.webContents.send("update-status", "Warte 7 Sekunden...");
 
     let ms = 7500;
@@ -136,6 +147,7 @@ ipcMain.on("lock-agent", async (event, agentId) => {
     );
   }
 });
+
 
 app.whenReady().then(createMainWindow);
 
