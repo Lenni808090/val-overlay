@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
-const {
+import { app, BrowserWindow, ipcMain } from "electron";
+import path from "path";
+import { fileURLToPath } from "url";
+import {
   readLockfile,
   getLocalAccessToken,
   getPUUID,
@@ -9,7 +10,10 @@ const {
   lockAgent,
   sleep,
   getPregameMapId,
-} = require("./apiClient.js");
+} from "./apiClient.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let mainWindow;
 
@@ -23,7 +27,7 @@ function createMainWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.cjs"),
     },
   });
 
@@ -98,16 +102,16 @@ ipcMain.on("lock-agent", async (event, agentId) => {
       );
     }
 
-    let mapId = await getPregameMapId(        
-        region,
-        shard,
-        matchId,
-        accessToken,
-        entitlement,
-        clientVersion,
-        clientPlatform
-      );
-    
+    let mapId = await getPregameMapId(
+      region,
+      shard,
+      matchId,
+      accessToken,
+      entitlement,
+      clientVersion,
+      clientPlatform
+    );
+
     console.log(mapId);
     mainWindow.webContents.send("update-status", "Warte 7 Sekunden...");
 
@@ -148,7 +152,6 @@ ipcMain.on("lock-agent", async (event, agentId) => {
   }
 });
 
-
 app.whenReady().then(createMainWindow);
 
 app.on("window-all-closed", () => {
@@ -159,6 +162,6 @@ app.on("window-all-closed", () => {
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createMainWindow();
   }
 });

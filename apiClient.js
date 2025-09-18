@@ -1,7 +1,12 @@
-const fs = require("fs").promises;
-const fetch = require("node-fetch");
-const https = require("https");
-const path = require("path");
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Allow local HTTPS with self-signed cert (Riot local endpoint)
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const lockfilePath = path.join(
   process.env.LOCALAPPDATA,
@@ -11,7 +16,7 @@ const lockfilePath = path.join(
   "lockfile"
 );
 
-async function readLockfile() {
+export async function readLockfile() {
   try {
     const content = await fs.readFile(lockfilePath, "utf-8");
     const parts = content.trim().split(":");
@@ -23,18 +28,15 @@ async function readLockfile() {
   }
 }
 
-// Change all these export functions to regular functions
-async function getLocalAccessToken(port, token) {
+export async function getLocalAccessToken(port, token) {
   const authString = `riot:${token}`;
   const encodedAuth = Buffer.from(authString).toString("base64");
-  const agent = new https.Agent({ rejectUnauthorized: false });
 
   const res = await fetch(`https://127.0.0.1:${port}/entitlements/v1/token`, {
     method: "GET",
     headers: {
       Authorization: `Basic ${encodedAuth}`,
     },
-    agent,
   });
 
   if (!res.ok) {
@@ -46,8 +48,7 @@ async function getLocalAccessToken(port, token) {
   return data.accessToken; // OAuth access token
 }
 
-// Change all these export functions to regular functions
-async function getPUUID(accessToken) {
+export async function getPUUID(accessToken) {
   const res = await fetch("https://auth.riotgames.com/userinfo", {
     method: "POST",
     headers: {
@@ -61,8 +62,7 @@ async function getPUUID(accessToken) {
   return data.sub;
 }
 
-// Change all these export functions to regular functions
-async function getEntitlement(accessToken) {
+export async function getEntitlement(accessToken) {
   const res = await fetch(
     "https://entitlements.auth.riotgames.com/api/token/v1",
     {
@@ -79,13 +79,11 @@ async function getEntitlement(accessToken) {
   return data.entitlements_token;
 }
 
-// Change all these export functions to regular functions
-function sleep(ms) {
+export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Change all these export functions to regular functions
-async function getPregameMatchId(
+export async function getPregameMatchId(
   region,
   shard,
   puuid,
@@ -126,7 +124,7 @@ async function getPregameMatchId(
   }
 }
 
-async function getPregameMapId(
+export async function getPregameMapId(
   region,
   shard,
   preGameMatchId,
@@ -168,7 +166,7 @@ async function getPregameMapId(
   }
 }
 
-async function lockAgent(
+export async function lockAgent(
   region,
   shard,
   matchId,
@@ -203,15 +201,3 @@ async function lockAgent(
   }
   console.log(`Agent locked successfully with status ${res.status}`);
 }
-
-// Export all functions
-module.exports = {
-  readLockfile,
-  getLocalAccessToken,
-  getPUUID,
-  getEntitlement,
-  sleep,
-  getPregameMatchId,
-  getPregameMapId,
-  lockAgent,
-};
