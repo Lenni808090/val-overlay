@@ -85,3 +85,53 @@ button.active {
   margin-top: 20px;
   font-style: italic;
 }
+
+/* Map-Agent Selection Styles */
+.map-agent-container {
+  margin-top: 15px;
+}
+
+.map-item {
+  margin-bottom: 15px;
+  padding: 12px;
+  background: #3a3a3a;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.map-name {
+  margin: 0 0 10px 0;
+  font-size: 1.1em;
+  color: #fff;
+  font-weight: bold;
+}
+
+.agent-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background: #2c2c2c;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.agent-select:hover {
+  border-color: #888;
+  background: #333;
+}
+
+.agent-select:focus {
+  outline: none;
+  border-color: #ff416c;
+  box-shadow: 0 0 5px rgba(255, 65, 108, 0.3);
+}
+
+.agent-select option {
+  background: #2c2c2c;
+  color: white;
+  padding: 5px;
+}

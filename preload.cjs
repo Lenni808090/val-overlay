@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onLockSuccess: (callback) => ipcRenderer.on('lock-success', () => callback()),
   onCancelSuccess: (callback) => ipcRenderer.on('cancel-success', () => callback()),
   cancelLock:  () => ipcRenderer.send('lock-canceled'),
+  lockMapAgent: () => ipcRenderer.send('lock-map-agent'),
 });
